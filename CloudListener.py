@@ -4,7 +4,7 @@ from firebase_admin import credentials, firestore
 import datetime
 
 # config variables
-project_id = "2346463"
+project_id = "1022994007"
 chars = ["gnaw", "edward"]
 max_len = 5
 
@@ -27,6 +27,9 @@ def log(msg):
     f.close()
 
 def var_set(val, user):
+    if (user is None):
+        return
+
     score = int(val[2:2+(int(val[:2]) - 10)])
     char = char_str(val[-2:-1])
     diff = diff_str(val[-1:])
@@ -76,25 +79,27 @@ def diff_str(nr):
 #initialize cloud listeners to scratch.mit.edu and turbowarp.org
 log("cloud listener initializing")
 s_events = scratch3.CloudEvents(project_id)
-t_events = scratch3.TwCloudEvents(project_id, purpose="scratchrunning.com scoreboard", contact="sfrt.default552@passinbox.com")
+#t_events = scratch3.TwCloudEvents(project_id, purpose="scratchrunning.com scoreboard", contact="sfrt.default552@passinbox.com")
 
 @s_events.event
 def on_set(event):
-    log(f"SCRATCH UPDATE - user: {event.user} - raw data: {event.value}")
-    var_set(event.value, event.value)
+    if (event.var == "CloudUpdate"):
+        log(f"SCRATCH UPDATE - user: {event.user} - raw data: {event.value}")
+        var_set(event.value, event.user)
 
 @s_events.event
 def on_ready():
    log("listening to scratch.mit.edu...")
 
-@t_events.event
+""" @t_events.event
 def on_set(event):
-    log(f"TURBOWARP UPDATE - user: {event.user} - raw data: {event.value}")
-    var_set(event.value, event.value)
+    if (event.var == "CloudUpdate"):
+        log(f"TURBOWARP UPDATE - user: {event.user} - raw data: {event.value}")
+        var_set(event.value, event.user)
 
 @t_events.event
 def on_ready():
-   log("listening to turbowarp.org...")
+   log("listening to turbowarp.org...") """
 
 s_events.start()
-t_events.start()
+#t_events.start()
