@@ -91,7 +91,7 @@ def on_set(event):
         log("old data - dismissed")
         return
     if (event.var == "CloudUpdate"):
-        log(f"SCRATCH UPDATE - user: {event.user} - raw data: {event.value}")
+        log(f"SCRATCH UPDATE - user: {event.user} - raw data: {event.value} timestamp: {event.timestamp}")
         var_set(event.value, event.user)
 
 @s_events.event
