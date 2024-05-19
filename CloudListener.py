@@ -20,7 +20,7 @@ for char in chars:
 
 #functions
 def log(msg):
-    print(msg)
+    #print(msg)
     file_name = 'logfile.txt'
     f = open(file_name, 'a+')
     f.write(f"[{datetime.datetime.now()}] {msg} \n")
