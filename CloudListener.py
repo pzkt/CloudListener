@@ -27,6 +27,7 @@ def log(msg):
     f.close()
 
 def var_set(val, user):
+    global data
     if (user is None):
         return
 
@@ -53,6 +54,7 @@ def var_set(val, user):
         log("nothing changed")
     else:
         db.document(char).set(doc, merge=True)
+        data[char] = db.document(char).get().to_dict()
 
 def char_str(nr):
     match nr:
@@ -91,7 +93,7 @@ def on_set(event):
         log("old data - dismissed")
         return
     if (event.var == "CloudUpdate"):
-        log(f"SCRATCH UPDATE - user: {event.user} - raw data: {event.value} timestamp: {event.timestamp}")
+        log(f"SCRATCH UPDATE - user: {event.user} - raw data: {event.value} - timestamp: {event.timestamp}")
         var_set(event.value, event.user)
 
 @s_events.event
