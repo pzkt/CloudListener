@@ -79,10 +79,17 @@ def diff_str(nr):
 #initialize cloud listeners to scratch.mit.edu and turbowarp.org
 log("cloud listener initializing")
 s_events = scratch3.CloudEvents(project_id)
+last_timestamp = 0
 #t_events = scratch3.TwCloudEvents(project_id, purpose="scratchrunning.com scoreboard", contact="sfrt.default552@passinbox.com")
 
 @s_events.event
 def on_set(event):
+    global last_timestamp
+    if(event.timestamp > last_timestamp):
+        last_timestamp = event.timestamp
+    else:
+        log("old data - dismissed")
+        return
     if (event.var == "CloudUpdate"):
         log(f"SCRATCH UPDATE - user: {event.user} - raw data: {event.value}")
         var_set(event.value, event.user)
