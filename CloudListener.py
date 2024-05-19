@@ -4,7 +4,7 @@ from firebase_admin import credentials, firestore
 import datetime
 
 # config variables
-project_id = "1022994007"
+project_id = "1023022765"
 chars = ["gnaw", "edward"]
 max_len = 5
 
