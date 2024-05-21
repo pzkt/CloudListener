@@ -81,7 +81,7 @@ def diff_str(nr):
 #initialize cloud listeners to scratch.mit.edu and turbowarp.org
 log("cloud listener initializing")
 s_events = scratch3.CloudEvents(project_id)
-last_timestamp = 1023501055
+last_timestamp = 1716320516
 #t_events = scratch3.TwCloudEvents(project_id, purpose="scratchrunning.com scoreboard", contact="sfrt.default552@passinbox.com")
 
 @s_events.event
