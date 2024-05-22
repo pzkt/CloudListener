@@ -6,7 +6,7 @@ import datetime
 # config variables
 project_id = "1023501055"
 chars = ["gnaw", "edward"]
-max_len = 5
+max_len = 10
 
 # firebase init
 cred = credentials.Certificate("key.json")
