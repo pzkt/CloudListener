@@ -2,6 +2,14 @@ import scratchattach as scratch3
 import firebase_admin
 from firebase_admin import credentials, firestore
 import datetime
+import logging
+from logging.handlers import RotatingFileHandler
+
+#logging
+logger = logging.getLogger('')
+logger.setLevel(logging.WARNING)
+handler = RotatingFileHandler('logfile.log', maxBytes=1024*1024, backupCount=1)
+logger.addHandler(handler)
 
 # config variables
 project_id = "1023501055"
@@ -20,11 +28,11 @@ for char in chars:
 
 #functions
 def log(msg):
-    #print(msg)
-    file_name = 'logfile.txt'
-    f = open(file_name, 'a+')
-    f.write(f"[{datetime.datetime.now()}] {msg} \n")
-    f.close()
+    logger.warning(f"[{datetime.datetime.now()}] {msg} \n")
+    #file_name = 'logfile.txt'
+    #f = open(file_name, 'a+')
+    #f.write(f"[{datetime.datetime.now()}] {msg} \n")
+    #f.close()
 
 def var_set(val, user):
     global data
@@ -90,7 +98,7 @@ def on_set(event):
     if(event.timestamp > last_timestamp):
         last_timestamp = event.timestamp
     else:
-        log("old data - dismissed")
+        #log("old data - dismissed")
         return
     if (event.var == "CloudUpdate"):
         log(f"SCRATCH UPDATE - user: {event.user} - raw data: {event.value} - timestamp: {event.timestamp}")
