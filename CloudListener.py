@@ -29,10 +29,6 @@ for char in chars:
 #functions
 def log(msg):
     logger.warning(f"[{datetime.datetime.now()}] {msg} \n")
-    #file_name = 'logfile.txt'
-    #f = open(file_name, 'a+')
-    #f.write(f"[{datetime.datetime.now()}] {msg} \n")
-    #f.close()
 
 def var_set(val, user):
     global data
@@ -94,13 +90,13 @@ last_timestamp = 1716320516
 
 @s_events.event
 def on_set(event):
-    global last_timestamp
+    """ global last_timestamp
     if(event.timestamp > last_timestamp):
         last_timestamp = event.timestamp
     else:
-        #log("old data - dismissed")
-        return
-    if (event.var == "CloudUpdate"):
+        log("old data - dismissed")
+        return """
+    if (event.var == "CloudUpdate2"):
         log(f"SCRATCH UPDATE - user: {event.user} - raw data: {event.value} - timestamp: {event.timestamp}")
         var_set(event.value, event.user)
 
