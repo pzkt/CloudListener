@@ -3,6 +3,7 @@ import firebase_admin
 from firebase_admin import credentials, firestore
 import datetime
 import logging
+import sched, time
 from logging.handlers import RotatingFileHandler
 
 #logging
@@ -21,6 +22,8 @@ cred = credentials.Certificate("key.json")
 firebase_admin.initialize_app(cred)
 database = firestore.client()
 db = database.collection('sfrt_scores')
+metadata = database.collection('meta').document('sfrt')
+metadata.set({'heartbeat':firestore.SERVER_TIMESTAMP}, merge=True)
 
 data = {}
 for char in chars:
@@ -59,6 +62,7 @@ def var_set(val, user):
     else:
         db.document(char).set(doc, merge=True)
         data[char] = db.document(char).get().to_dict()
+        metadata.set({'last_update':firestore.SERVER_TIMESTAMP}, merge=True)
 
 def char_str(nr):
     match nr:
@@ -90,12 +94,11 @@ last_timestamp = 1716320516
 
 @s_events.event
 def on_set(event):
-    """ global last_timestamp
+    global last_timestamp
     if(event.timestamp > last_timestamp):
         last_timestamp = event.timestamp
-    else:
-        log("old data - dismissed")
-        return """
+        metadata.set({'last_data':firestore.SERVER_TIMESTAMP}, merge=True)
+
     if (event.var == "CloudUpdate2"):
         log(f"SCRATCH UPDATE - user: {event.user} - raw data: {event.value} - timestamp: {event.timestamp}")
         var_set(event.value, event.user)
@@ -116,3 +119,13 @@ def on_ready():
 
 s_events.start()
 #t_events.start()
+
+#signal that we are still alive
+def heartbeat(scheduler): 
+    scheduler.enter(600, 1, heartbeat, (scheduler,))
+    log("sending heartbeat...")
+    metadata.set({'heartbeat':firestore.SERVER_TIMESTAMP}, merge=True)
+
+my_scheduler = sched.scheduler(time.time, time.sleep)
+my_scheduler.enter(600, 1, heartbeat, (my_scheduler,))
+my_scheduler.run()
