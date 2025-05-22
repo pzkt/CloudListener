@@ -2,6 +2,8 @@ import scratchattach as scratch3
 import firebase_admin
 from firebase_admin import credentials, firestore
 from datetime import datetime, timezone
+import time
+import math
 import logging
 import requests
 import sched, time
@@ -166,7 +168,7 @@ exit() """
 log("cloud listener initializing")
 cloud = scratch3.get_scratch_cloud(project_id)
 s_events = cloud.events()
-last_timestamp = 1747842900240
+last_timestamp = math.floor(time.time()*1000)
 
 @s_events.event
 def on_set(event):
