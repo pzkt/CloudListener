@@ -100,7 +100,15 @@ def var_set(val, user):
 #add a username-id key-value pair to firestore for pfps and add to cumulative score
 def add_user_data(user, score):
     if(user not in userdata):
-        res = requests.get(f"https://api.scratch.mit.edu/users/{user}").json()
+        response = requests.get(f"https://api.scratch.mit.edu/users/{user}").json()
+
+        if(not response.ok):
+            return
+        try:
+            res = response.json()
+        except ValueError:
+            return
+
         if("id" not in res):
             return
         userdata[user] = {}
