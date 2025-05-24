@@ -100,7 +100,7 @@ def var_set(val, user):
 #add a username-id key-value pair to firestore for pfps and add to cumulative score
 def add_user_data(user, score):
     if(user not in userdata):
-        response = requests.get(f"https://api.scratch.mit.edu/users/{user}").json()
+        response = requests.get(f"https://api.scratch.mit.edu/users/{user}")
 
         if(not response.ok):
             return
@@ -173,13 +173,14 @@ exit() """
 # --------------------------
 
 #initialize cloud listeners to scratch.mit.edu and turbowarp.org
-log("cloud listener initializing")
+log("cloud listener initializing (special raspberry pi version)")
 cloud = scratch3.get_scratch_cloud(project_id)
 s_events = cloud.events()
 last_timestamp = math.floor(time.time()*1000)
 
 @s_events.event
 def on_set(event):
+    log(f"something happened - user: {event.user} - raw data: {event.value} - timestamp: {event.timestamp}")
     global last_timestamp
     if(event.timestamp > last_timestamp):
         last_timestamp = event.timestamp
