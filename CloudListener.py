@@ -181,11 +181,11 @@ last_timestamp = math.floor(time.time()*1000)
 @s_events.event
 def on_set(event):
     global last_timestamp
-    log(f"something happened - user: {event.user} - raw data: {event.value} - timestamp: {event.timestamp} - var: {event.var} - timetest: {event.timestamp > last_timestamp}")
+    #log(f"something happened - user: {event.user} - raw data: {event.value} - timestamp: {event.timestamp} - var: {event.var} - timetest: {event.timestamp > last_timestamp}")
     if(event.timestamp > last_timestamp):
         last_timestamp = event.timestamp
         metadata.set({'last_data':firestore.SERVER_TIMESTAMP}, merge=True)
-        if (event.var == "☁ CloudUpdate2"):
+        if (event.var == "CloudUpdate2"):
             log(f"SCRATCH UPDATE - user: {event.user} - raw data: {event.value} - timestamp: {event.timestamp}")
             var_set(event.value, event.user)
     else:
