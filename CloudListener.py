@@ -180,7 +180,7 @@ last_timestamp = math.floor(time.time()*1000)
 
 @s_events.event
 def on_set(event):
-    log(f"something happened - user: {event.user} - raw data: {event.value} - timestamp: {event.timestamp}")
+    log(f"something happened - user: {event.user} - raw data: {event.value} - timestamp: {event.timestamp} - var: {event.var} - timetest: {event.timestamp > last_timestamp}")
     global last_timestamp
     if(event.timestamp > last_timestamp):
         last_timestamp = event.timestamp
