@@ -17,7 +17,7 @@ handler = RotatingFileHandler('logfile.log', maxBytes=1024*1024, backupCount=1)
 logger.addHandler(handler)
 
 # config variables
-chars = ["arc","co-op","ed","gnaw","phantom","xavier"]
+chars = ["arc","co-op","ed","gnaw","phantom","xavier","darc"]
 project_id = "184411641"
 max_len = 20
 
@@ -62,6 +62,8 @@ def char_str(nr):
             return "xavier"
         case "05":
             return "ed"
+        case "06":
+            return "darc"
         case _:
             log(f"ERROR: unknown character id: {nr}")
             return None
