@@ -17,7 +17,7 @@ handler = RotatingFileHandler('logfile.log', maxBytes=1024*1024, backupCount=1)
 logger.addHandler(handler)
 
 # config variables
-chars = ["arc","co-op","ed","gnaw","phantom","xavier","darc"]
+chars = ["arc","co-op","ed","gnaw","phantom","xavier","darc","rikaal"]
 project_id = "184411641"
 max_len = 20
 
@@ -64,6 +64,8 @@ def char_str(nr):
             return "ed"
         case "06":
             return "darc"
+        case "07":
+            return "rikaal"
         case _:
             log(f"ERROR: unknown character id: {nr}")
             return None
@@ -187,7 +189,7 @@ def on_set(event):
     if(event.timestamp > last_timestamp):
         last_timestamp = event.timestamp
         metadata.set({'last_data':firestore.SERVER_TIMESTAMP}, merge=True)
-        if (event.var == "CloudUpdate2"):
+        if event.var == "CloudUpdate2" or event.var == "☁ CloudUpdate2":
             log(f"SCRATCH UPDATE - user: {event.user} - raw data: {event.value} - timestamp: {event.timestamp}")
             var_set(event.value, event.user)
     else:
